@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
 import { Note } from './models';
+import './App.css';
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -58,37 +59,43 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>My Notes</h1>
+    <div className='notes-app'>
+      <div className='notes-container'>
+      <h1>💖 My Notes</h1>
       {error && (
-        <div style={{ color: 'red', marginBottom: '10px' }}>
+        <div className='notes-error'>
           {error}
           </div>
       )}
-
-
-
       <input
+        className='note-input'
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="Note name"
-      />
-      <textarea
+        placeholder="Note name ✏️"
+        />
+      
+        <textarea
+          className='note-textarea'
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Note content"
-      />
-      <button onClick={addNote}>Add Note</button>
+        placeholder="Note content 💬"
+        />
+      
+      <div className='add-button'>
+        <button onClick={addNote}>➕ Add Note</button>
+      </div>
+      
 
-      <div>
+      <div className='new-note'>
         {notes.map(note => (
-          <div key={note.id} style={{ margin: '10px', padding: '10px', border: '1px solid #ccc' }}>
+          <div key={note.id} className='note-card'>
             <h3>{note.name}</h3>
             <p>{note.content}</p>
-            <button onClick={() => deleteNote(note.id)}>Delete</button>
+            <button onClick={() => deleteNote(note.id)}>🗑️ Delete</button>
           </div>
         ))}
-      </div>
+        </div>
+        </div>
     </div>
   );
 }
