@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { DataStore } from '@aws-amplify/datastore';
 import { Note } from './models';
 import './App.css';
+import { Button, Flex, Heading } from '@aws-amplify/ui-react';
 
-function App() {
+function App({signOut, user}) {
   const [notes, setNotes] = useState([]);
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
@@ -12,11 +13,11 @@ function App() {
   // Load notes from database on startup
   useEffect(() => {
     fetchNotes();
-  }, []);
+  });
 
   async function fetchNotes() {
     try {
-      const notes = await DataStore.query(Note);
+      const notes = await DataStore.query(Note, (note) => note.owner('eq', user.username));
     setNotes(notes);
     } catch (err) {
       setError("Failed to load notes: " + err.message);
@@ -35,7 +36,8 @@ function App() {
       new Note({
         name,
         content: content || "", // Ensure content exists
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        owner: user.username
       })
     );
     setName('');
@@ -59,6 +61,13 @@ function App() {
   }
 
   return (
+     <Flex direction="column" padding="1rem">
+      {/* Add logout button */}
+      <Flex justifyContent="flex-end">
+        <Button variation="link" onClick={signOut}>
+          Sign Out ({user.username})
+        </Button>
+      </Flex>
     <div className='notes-app'>
       <div className='notes-container'>
       <h1>💖 My Notes</h1>
@@ -96,7 +105,8 @@ function App() {
         ))}
         </div>
         </div>
-    </div>
+      </div>
+      </Flex>
   );
 }
 

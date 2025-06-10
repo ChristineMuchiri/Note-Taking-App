@@ -7,6 +7,7 @@ export const getNote = /* GraphQL */ `
       id
       name
       content
+      owner
       createdAt
       updatedAt
       _version
@@ -27,6 +28,7 @@ export const listNotes = /* GraphQL */ `
         id
         name
         content
+        owner
         createdAt
         updatedAt
         _version
@@ -57,6 +59,7 @@ export const syncNotes = /* GraphQL */ `
         id
         name
         content
+        owner
         createdAt
         updatedAt
         _version

@@ -13,6 +13,7 @@ type EagerNote = {
   readonly id: string;
   readonly name: string;
   readonly content?: string | null;
+  readonly owner?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -24,6 +25,7 @@ type LazyNote = {
   readonly id: string;
   readonly name: string;
   readonly content?: string | null;
+  readonly owner?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
