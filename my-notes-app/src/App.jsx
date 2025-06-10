@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { DataStore } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 import { Note } from './models';
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const setError = useState('');
 
   // Load notes from database on startup
   useEffect(() => {
@@ -18,11 +19,26 @@ function App() {
   }
 
   async function addNote() {
-    await DataStore.save(new Note({ title, content }));
+  if (!title.trim()) {
+    setError("Title is required");
+    return;
+  }
+  
+  try {
+    await DataStore.save(
+      new Note({
+        title,
+        content: content || "", // Ensure content exists
+        createdAt: new Date().toISOString()
+      })
+    );
     setTitle('');
     setContent('');
-    fetchNotes(); // Refresh the list
+    await fetchNotes();
+  } catch (err) {
+    setError("Failed to save: " + err.message);
   }
+}
 
   async function deleteNote(id) {
     const toDelete = await DataStore.query(Note, id);

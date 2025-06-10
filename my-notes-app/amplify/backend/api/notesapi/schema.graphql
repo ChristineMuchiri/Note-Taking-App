@@ -6,4 +6,6 @@ type Note @model {
   id: ID!
   name: String!
   content: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }
