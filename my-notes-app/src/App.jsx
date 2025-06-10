@@ -4,9 +4,9 @@ import { Note } from './models';
 
 function App() {
   const [notes, setNotes] = useState([]);
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
   const [content, setContent] = useState('');
-  const setError = useState('');
+  const [error, setError] = useState(null);
 
   // Load notes from database on startup
   useEffect(() => {
@@ -14,12 +14,17 @@ function App() {
   }, []);
 
   async function fetchNotes() {
-    const notes = await DataStore.query(Note);
+    try {
+      const notes = await DataStore.query(Note);
     setNotes(notes);
+    } catch (err) {
+      setError("Failed to load notes: " + err.message);
+    }
+    
   }
 
   async function addNote() {
-  if (!title.trim()) {
+  if (!name.trim()) {
     setError("Title is required");
     return;
   }
@@ -27,13 +32,14 @@ function App() {
   try {
     await DataStore.save(
       new Note({
-        title,
+        name,
         content: content || "", // Ensure content exists
         createdAt: new Date().toISOString()
       })
     );
-    setTitle('');
+    setName('');
     setContent('');
+    setError(null);
     await fetchNotes();
   } catch (err) {
     setError("Failed to save: " + err.message);
@@ -41,18 +47,31 @@ function App() {
 }
 
   async function deleteNote(id) {
-    const toDelete = await DataStore.query(Note, id);
+    try {
+      const toDelete = await DataStore.query(Note, id);
     if (toDelete) await DataStore.delete(toDelete);
-    fetchNotes(); // Refresh the list
+    await fetchNotes(); // Refresh the list
+    } catch (err) {
+      setError("Failed to delete note: " + err.message);
+    }
+    
   }
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>My Notes</h1>
+      {error && (
+        <div style={{ color: 'red', marginBottom: '10px' }}>
+          {error}
+          </div>
+      )}
+
+
+
       <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Note title"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Note name"
       />
       <textarea
         value={content}
@@ -64,7 +83,7 @@ function App() {
       <div>
         {notes.map(note => (
           <div key={note.id} style={{ margin: '10px', padding: '10px', border: '1px solid #ccc' }}>
-            <h3>{note.title}</h3>
+            <h3>{note.name}</h3>
             <p>{note.content}</p>
             <button onClick={() => deleteNote(note.id)}>Delete</button>
           </div>
