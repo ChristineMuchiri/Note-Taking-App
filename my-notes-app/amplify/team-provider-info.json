@@ -9,14 +9,25 @@
       "UnauthRoleName": "amplify-mynotesapp-dev-68b65-unauthRole",
       "StackName": "amplify-mynotesapp-dev-68b65",
       "StackId": "arn:aws:cloudformation:us-east-1:025066266149:stack/amplify-mynotesapp-dev-68b65/b94fda00-45e9-11f0-9b85-127aa5b3d8c3",
-      "AmplifyAppId": "d28iq67b9wbsrb"
+      "AmplifyAppId": "d28iq67b9wbsrb",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-mynotesapp-dev-68b65-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "api": {
         "notesapi": {}
       },
       "auth": {
-        "mynotesapp706c8934": {}
+        "mynotesapp706c8934": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "mynotesapp706c8934CustomMessage": {
+          "REDIRECTURL": "cuttly.space",
+          "EMAILSUBJECT": "WELCOME TO MY NOTES APP",
+          "EMAILMESSAGE": "Welcome to my notes app, feel free to use app",
+          "deploymentBucketName": "amplify-mynotesapp-dev-68b65-deployment",
+          "s3Key": "amplify-builds/mynotesapp706c8934CustomMessage-484d7253496e4f533274-build.zip"
+        }
       }
     }
   }
